@@ -2,7 +2,7 @@
 # run.sh
 
 # Function untuk menjalankan container
-start_containers() {
+build_containers() {
     echo "🚀 Starting Laravel Docker containers..."
     
     # Build dan jalankan container
@@ -20,10 +20,22 @@ start_containers() {
     echo "🗄️  Database is available at: localhost:5432"
 }
 
+down_containers() {
+    echo "⏹️  Stopping containers..."
+    docker compose down
+}
+
+start_containers() {
+    echo "🚀 Starting Laravel Docker containers..."
+    
+    # Build dan jalankan container
+    docker compose start
+}
+
 # Function untuk menghentikan container
 stop_containers() {
     echo "⏹️  Stopping containers..."
-    docker compose down
+    docker compose stop
 }
 
 # Function untuk melihat logs
