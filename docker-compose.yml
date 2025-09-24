@@ -1,0 +1,60 @@
+# docker-compose.yml
+# version: '3.8'
+
+services:
+  # Laravel Application
+  laravel:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel_app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./storage:/var/www/storage
+    networks:
+      - laravel_network
+    depends_on:
+      - postgres
+
+  # Nginx Service
+  nginx:
+    image: nginx:alpine
+    container_name: nginx_server
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx:/etc/nginx/conf.d
+    networks:
+      - laravel_network
+    depends_on:
+      - laravel
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres
+    container_name: postgres_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: laravel_db
+      POSTGRES_USER: laravel_user
+      POSTGRES_PASSWORD: laravel_password
+    ports:
+      - "5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - laravel_network
+
+# Networks
+networks:
+  laravel_network:
+    driver: bridge
+
+# Volumes
+volumes:
+  postgres_data:
+    driver: local
