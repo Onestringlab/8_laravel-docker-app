@@ -1,9 +1,9 @@
 #!/bin/bash
 # run.sh
 
-# Function untuk menjalankan container
+# Function untuk membangun container
 build_containers() {
-    echo "🚀 Starting Laravel Docker containers..."
+    echo "🚀 Build Laravel Docker containers..."
     
     # Build dan jalankan container
     docker compose up -d --build
@@ -20,11 +20,14 @@ build_containers() {
     echo "🗄️  Database is available at: localhost:5432"
 }
 
+# Function untuk menghapus container
 down_containers() {
     echo "⏹️  Stopping containers..."
     docker compose down
 }
 
+
+# Function untuk menjalankan container
 start_containers() {
     echo "🚀 Starting Laravel Docker containers..."
     
@@ -60,6 +63,12 @@ composer_cmd() {
 
 # Menu
 case "$1" in
+    build)
+        build_containers
+        ;;
+    down)
+        down_containers
+        ;;
     start)
         start_containers
         ;;
@@ -81,10 +90,12 @@ case "$1" in
         composer_cmd "$@"
         ;;
     *)
-        echo "Usage: $0 {start|stop|logs|shell|artisan|composer}"
+        echo "Usage: $0 {build|down|start|stop|logs|shell|artisan|composer}"
         echo ""
         echo "Commands:"
-        echo "  start     - Build and start containers"
+        echo "  build     - Build and start containers"
+        echo "  down      - Down containers"
+        echo "  start     - Start containers"
         echo "  stop      - Stop containers"
         echo "  logs      - Show container logs"
         echo "  shell     - Enter Laravel container"
